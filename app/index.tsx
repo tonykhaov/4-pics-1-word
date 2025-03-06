@@ -2,12 +2,19 @@ import * as React from 'react'
 import { Image, Text, View, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import data from '../data.json'
+import { generateRandomLetter, shuffleArray } from '@/utils'
 
 export default function HomeScreen() {
   const [guess, setGuess] = React.useState<(string | null)[]>(
     [...data[0].word].map((letter, i) => (i % 3 === 0 ? letter : null)),
   )
 
+  const MAX_X = 12
+  const letters = React.useRef<string[]>(
+    shuffleArray([...data[0].word, ...new Array(MAX_X - data[0].word.length).fill(null).map(generateRandomLetter)]),
+  )
+
+  console.log('letters', letters)
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.images}>
@@ -21,6 +28,19 @@ export default function HomeScreen() {
           <View key={index} style={styles.guessLetterBox}>
             <Text style={styles.guessLetterBoxText}>{letter}</Text>
           </View>
+        ))}
+      </View>
+
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'center',
+          gap: 16,
+          marginTop: 48,
+        }}
+      >
+        {letters.current.map((letter, index) => (
+          <Text key={letter + index}>{letter}</Text>
         ))}
       </View>
     </SafeAreaView>
