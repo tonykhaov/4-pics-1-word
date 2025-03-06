@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Image, Text, View, StyleSheet } from 'react-native'
+import { Image, Text, View, StyleSheet, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import data from '../data.json'
 import { generateRandomLetter, shuffleArray } from '@/utils'
@@ -14,7 +14,9 @@ export default function HomeScreen() {
     shuffleArray([...data[0].word, ...new Array(MAX_X - data[0].word.length).fill(null).map(generateRandomLetter)]),
   )
 
-  console.log('letters', letters)
+  const handleClear = () => {
+    setGuess(guess.map(() => null))
+  }
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.images}>
@@ -33,15 +35,44 @@ export default function HomeScreen() {
 
       <View
         style={{
-          flexDirection: 'row',
-          justifyContent: 'center',
-          gap: 16,
           marginTop: 48,
+          flexDirection: 'row',
         }}
       >
-        {letters.current.map((letter, index) => (
-          <Text key={letter + index}>{letter}</Text>
-        ))}
+        <View
+          style={{
+            flex: 1,
+          }}
+        >
+          {/* First row */}
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: 12,
+            }}
+          >
+            {letters.current.slice(0, 6).map((letter, index) => (
+              <Text key={letter + index}>{letter}</Text>
+            ))}
+          </View>
+          {/* Second row */}
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: 12,
+            }}
+          >
+            {letters.current.slice(6).map((letter, index) => (
+              <Text key={letter + index}>{letter}</Text>
+            ))}
+          </View>
+        </View>
+
+        <View>
+          <Pressable onPress={handleClear}>
+            <Text>Clear</Text>
+          </Pressable>
+        </View>
       </View>
     </SafeAreaView>
   )
