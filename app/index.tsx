@@ -14,6 +14,20 @@ export default function HomeScreen() {
     shuffleArray([...data[0].word, ...new Array(MAX_X - data[0].word.length).fill(null).map(generateRandomLetter)]),
   )
 
+  const [usedLetters, setUsedLetters] = React.useState(letters.current.map(() => false))
+
+  const selectLetter = (index: number) => {
+    setUsedLetters((prevUsedLetters) => {
+      const newUsedLetters = [...prevUsedLetters]
+      newUsedLetters[index] = true
+      return newUsedLetters
+    })
+
+    const letter = letters.current[index]
+
+    console.log('letter', letter)
+  }
+
   const handleClear = () => {
     setGuess(guess.map(() => null))
   }
@@ -52,7 +66,16 @@ export default function HomeScreen() {
             }}
           >
             {letters.current.slice(0, 6).map((letter, index) => (
-              <Text key={letter + index}>{letter}</Text>
+              <Pressable
+                onPress={() => selectLetter(index)}
+                disabled={usedLetters[index]}
+                style={styles.letterBtn}
+                key={letter + index}
+              >
+                <Text key={letter + index} style={styles.letterBtnText}>
+                  {letter}
+                </Text>
+              </Pressable>
             ))}
           </View>
           {/* Second row */}
@@ -63,7 +86,16 @@ export default function HomeScreen() {
             }}
           >
             {letters.current.slice(6).map((letter, index) => (
-              <Text key={letter + index}>{letter}</Text>
+              <Pressable
+                onPress={() => selectLetter(index + 6)}
+                disabled={usedLetters[index + 6]}
+                style={styles.letterBtn}
+                key={letter + index}
+              >
+                <Text key={letter + index} style={styles.letterBtnText}>
+                  {letter}
+                </Text>
+              </Pressable>
             ))}
           </View>
         </View>
@@ -114,5 +146,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 24,
     textTransform: 'uppercase',
+  },
+
+  letterBtn: {
+    minWidth: 48,
+    minHeight: 48,
+    maxWidth: 48,
+    maxHeight: 48,
+    backgroundColor: '#EEEEEE',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  letterBtnText: {
+    fontSize: 24,
+    textTransform: 'uppercase',
+    fontWeight: 'bold',
   },
 })
