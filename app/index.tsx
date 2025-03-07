@@ -24,8 +24,6 @@ export default function HomeScreen() {
     })
 
     const letter = letters.current[index]
-
-    console.log('letter', letter)
   }
 
   const handleClear = () => {
@@ -65,19 +63,22 @@ export default function HomeScreen() {
               gap: 12,
             }}
           >
-            {letters.current.slice(0, 6).map((letter, index) => (
-              <Pressable
-                onPress={() => selectLetter(index)}
-                disabled={usedLetters[index]}
-                style={styles.letterBtn}
-                key={letter + index}
-              >
-                <Text key={letter + index} style={styles.letterBtnText}>
-                  {letter}
-                </Text>
-              </Pressable>
-            ))}
+            {letters.current.slice(0, 6).map((letter, index) => {
+              const isUsed = usedLetters[index]
+
+              return (
+                <Pressable
+                  onPress={() => selectLetter(index)}
+                  disabled={isUsed}
+                  style={[styles.letterBtn, isUsed ? styles.letterBtnDisabled : null]}
+                  key={letter + index}
+                >
+                  <Text style={styles.letterBtnText}>{letter}</Text>
+                </Pressable>
+              )
+            })}
           </View>
+
           {/* Second row */}
           <View
             style={{
@@ -85,23 +86,35 @@ export default function HomeScreen() {
               gap: 12,
             }}
           >
-            {letters.current.slice(6).map((letter, index) => (
-              <Pressable
-                onPress={() => selectLetter(index + 6)}
-                disabled={usedLetters[index + 6]}
-                style={styles.letterBtn}
-                key={letter + index}
-              >
-                <Text key={letter + index} style={styles.letterBtnText}>
-                  {letter}
-                </Text>
-              </Pressable>
-            ))}
+            {letters.current.slice(6).map((letter, index) => {
+              const correctIndex = index + 6
+              const isUsed = usedLetters[correctIndex]
+
+              return (
+                <Pressable
+                  onPress={() => selectLetter(correctIndex)}
+                  disabled={isUsed}
+                  style={[styles.letterBtn, isUsed ? styles.letterBtnDisabled : null]}
+                  key={letter + correctIndex}
+                >
+                  <Text style={styles.letterBtnText}>{letter}</Text>
+                </Pressable>
+              )
+            })}
           </View>
         </View>
 
-        <View>
-          <Pressable onPress={handleClear}>
+        <View
+          style={{
+            justifyContent: 'center',
+          }}
+        >
+          <Pressable
+            style={{
+              padding: 16,
+            }}
+            onPress={handleClear}
+          >
             <Text>Clear</Text>
           </Pressable>
         </View>
@@ -162,5 +175,8 @@ const styles = StyleSheet.create({
     fontSize: 24,
     textTransform: 'uppercase',
     fontWeight: 'bold',
+  },
+  letterBtnDisabled: {
+    opacity: 0.1,
   },
 })
