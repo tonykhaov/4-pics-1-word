@@ -5,9 +5,7 @@ import data from '../data.json'
 import { generateRandomLetter, shuffleArray } from '@/utils'
 
 export default function HomeScreen() {
-  const [guess, setGuess] = React.useState<(string | null)[]>(
-    [...data[0].word].map((letter, i) => (i % 3 === 0 ? letter : null)),
-  )
+  const [guess, setGuess] = React.useState<(string | null)[]>([...data[0].word].map(() => null))
 
   const MAX_X = 12
   const letters = React.useRef<string[]>(
@@ -15,6 +13,9 @@ export default function HomeScreen() {
   )
 
   const [usedLetters, setUsedLetters] = React.useState(letters.current.map(() => false))
+
+  console.log('guess', guess)
+  console.log('usedLetters', usedLetters)
 
   const canAddMoreLetter = guess.some((letter) => letter === null)
 
