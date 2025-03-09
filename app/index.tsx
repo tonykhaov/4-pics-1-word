@@ -15,15 +15,17 @@ export type Guess = {
 export type Status = 'success' | 'error' | 'idle'
 
 export default function HomeScreen() {
-  const [guess, setGuess] = React.useState<(Guess | null)[]>([...data[0].word].map(() => null))
+  const game = React.useRef(data[0])
+
+  const [guess, setGuess] = React.useState<(Guess | null)[]>([...game.current.word].map(() => null))
 
   const [status, setStatus] = React.useState<Status>('idle')
 
   const MAX_SUGGESTED_LETTERS = 12
   const letters = React.useRef(
     shuffleArray([
-      ...data[0].word,
-      ...new Array(MAX_SUGGESTED_LETTERS - data[0].word.length).fill(null).map(generateRandomLetter),
+      ...game.current.word,
+      ...new Array(MAX_SUGGESTED_LETTERS - game.current.word.length).fill(null).map(generateRandomLetter),
     ]),
   )
   const [usedLetters, setUsedLetters] = React.useState(letters.current.map(() => false))
@@ -48,7 +50,7 @@ export default function HomeScreen() {
 
     const shouldCheckGuess = newGuess.every((letter) => letter !== null)
     if (shouldCheckGuess) {
-      const matchesWord = newGuess.join('') === data[0].word
+      const matchesWord = newGuess.join('') === game.current.word
       if (matchesWord) {
         setStatus('success')
       } else {
@@ -80,7 +82,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ImagesGallery images={data[0].images} />
+      <ImagesGallery images={game.current.images} />
 
       <View style={styles.separator} />
 
