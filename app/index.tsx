@@ -50,7 +50,7 @@ export default function HomeScreen() {
 
     const shouldCheckGuess = newGuess.every((letter) => letter !== null)
     if (shouldCheckGuess) {
-      const matchesWord = newGuess.join('') === game.current.word
+      const matchesWord = newGuess.map(({ text }) => text).join('') === game.current.word
       if (matchesWord) {
         setStatus('success')
       } else {
