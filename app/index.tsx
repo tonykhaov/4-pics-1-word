@@ -17,17 +17,37 @@ export default function HomeScreen() {
   const [usedLetters, setUsedLetters] = React.useState(letters.current.map(() => false))
 
   const selectLetter = (index: number) => {
-    setUsedLetters((prevUsedLetters) => {
-      const newUsedLetters = [...prevUsedLetters]
-      newUsedLetters[index] = true
-      return newUsedLetters
-    })
+    const newUsedLetters = [...usedLetters]
+    newUsedLetters[index] = true
+    setUsedLetters(newUsedLetters)
 
     const letter = letters.current[index]
+    const newGuess = [...guess]
+
+    const newGuessLetterIndex = newGuess.findIndex((letter) => letter === null)
+
+    if (newGuessLetterIndex === -1) {
+      // guess box is full but we should never reach this point
+      return
+    }
+
+    newGuess[newGuessLetterIndex] = letter
+    setGuess(newGuess)
+
+    if (newGuess.every((letter) => letter !== null)) {
+      // user is guessing a word, show the feedback.
+      const matchesWord = newGuess.join('') === data[0].word
+      if (matchesWord) {
+        console.log('WORD FOUND:', data[0].word)
+      } else {
+        console.log('WRONG GUESS:', newGuess.join(''))
+      }
+    }
   }
 
   const handleClear = () => {
     setGuess(guess.map(() => null))
+    setUsedLetters(letters.current.map(() => false))
   }
   return (
     <SafeAreaView style={styles.container}>
