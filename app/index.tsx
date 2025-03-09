@@ -4,8 +4,12 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import data from '../data.json'
 import { generateRandomLetter, shuffleArray } from '@/utils'
 
+type Guess = {
+  text: string
+  fromIndex: number
+}
 export default function HomeScreen() {
-  const [guess, setGuess] = React.useState<(string | null)[]>([...data[0].word].map(() => null))
+  const [guess, setGuess] = React.useState<(Guess | null)[]>([...data[0].word].map(() => null))
 
   const MAX_X = 12
   const letters = React.useRef<string[]>(
@@ -13,9 +17,6 @@ export default function HomeScreen() {
   )
 
   const [usedLetters, setUsedLetters] = React.useState(letters.current.map(() => false))
-
-  console.log('guess', guess)
-  console.log('usedLetters', usedLetters)
 
   const canAddMoreLetter = guess.some((letter) => letter === null)
 
@@ -34,11 +35,15 @@ export default function HomeScreen() {
       return
     }
 
-    newGuess[newGuessLetterIndex] = letter
+    newGuess[newGuessLetterIndex] = {
+      text: letter,
+      fromIndex: index,
+    }
+
     setGuess(newGuess)
 
     if (newGuess.every((letter) => letter !== null)) {
-      // user is guessing a word, show the feedback.
+      // user is making a guess, show the feedback.
       const matchesWord = newGuess.join('') === data[0].word
       if (matchesWord) {
         console.log('WORD FOUND:', data[0].word)
@@ -67,17 +72,19 @@ export default function HomeScreen() {
             disabled={!letter}
             style={styles.guessLetterBox}
             onPress={() => {
+              if (!letter) {
+                return
+              }
               const newGuess = [...guess]
               newGuess[index] = null
               setGuess(newGuess)
 
-              // TODO: figure out a way to get its position in the used letters array
               const newUsedLetters = [...usedLetters]
-              newUsedLetters[index] = false
+              newUsedLetters[letter.fromIndex] = false
               setUsedLetters(newUsedLetters)
             }}
           >
-            <Text style={styles.guessLetterBoxText}>{letter}</Text>
+            <Text style={styles.guessLetterBoxText}>{letter?.text}</Text>
           </Pressable>
         ))}
       </View>
