@@ -61,9 +61,22 @@ export default function HomeScreen() {
 
       <View style={styles.guess}>
         {guess.map((letter, index) => (
-          <View key={index} style={styles.guessLetterBox}>
+          <Pressable
+            key={index}
+            style={styles.guessLetterBox}
+            onPress={() => {
+              const newGuess = [...guess]
+              newGuess[index] = null
+              setGuess(newGuess)
+
+              // TODO: figure out a way to get its position in the used letters array
+              const newUsedLetters = [...usedLetters]
+              newUsedLetters[index] = false
+              setUsedLetters(newUsedLetters)
+            }}
+          >
             <Text style={styles.guessLetterBoxText}>{letter}</Text>
-          </View>
+          </Pressable>
         ))}
       </View>
 
