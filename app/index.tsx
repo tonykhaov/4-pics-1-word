@@ -24,7 +24,7 @@ export default function HomeScreen() {
   )
   const [usedLetters, setUsedLetters] = React.useState(letters.current.map(() => false))
 
-  const selectLetter = (index: number) => {
+  const pickLetter = (index: number) => {
     const newUsedLetters = [...usedLetters]
     newUsedLetters[index] = true
     setUsedLetters(newUsedLetters)
@@ -34,20 +34,16 @@ export default function HomeScreen() {
 
     const newGuessLetterIndex = newGuess.findIndex((letter) => letter === null)
 
-    if (newGuessLetterIndex === -1) {
-      // guess box is full but we should never reach this point
-      return
+    if (newGuessLetterIndex >= 0) {
+      newGuess[newGuessLetterIndex] = {
+        text: letter,
+        fromIndex: index,
+      }
+      setGuess(newGuess)
     }
 
-    newGuess[newGuessLetterIndex] = {
-      text: letter,
-      fromIndex: index,
-    }
-
-    setGuess(newGuess)
-
-    if (newGuess.every((letter) => letter !== null)) {
-      // user is making a guess, show the feedback.
+    const shouldCheckGuess = newGuess.every((letter) => letter !== null)
+    if (shouldCheckGuess) {
       const matchesWord = newGuess.join('') === data[0].word
       if (matchesWord) {
         setStatus('success')
@@ -114,8 +110,8 @@ export default function HomeScreen() {
       <SuggestedLetters
         letters={letters.current}
         usedLetters={usedLetters}
-        canSelectLetter={guess.some((letter) => letter === null)}
-        onSelectLetter={selectLetter}
+        canPickLetter={guess.some((letter) => letter === null)}
+        onPickLetter={pickLetter}
         onClear={handleClear}
       />
     </SafeAreaView>

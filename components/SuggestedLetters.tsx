@@ -5,16 +5,16 @@ import { UsedLetter } from './UsedLetter'
 type SuggestedLettersProps = {
   letters: string[]
   usedLetters: boolean[]
-  onSelectLetter: (index: number) => void
-  canSelectLetter: boolean
+  onPickLetter: (index: number) => void
+  canPickLetter: boolean
   onClear: () => void
 }
 
 export function SuggestedLetters({
   letters,
-  onSelectLetter,
+  onPickLetter,
   usedLetters,
-  canSelectLetter,
+  canPickLetter,
   onClear,
 }: SuggestedLettersProps) {
   return (
@@ -29,10 +29,10 @@ export function SuggestedLetters({
 
             return (
               <Pressable
-                onPress={() => onSelectLetter(index)}
-                style={[styles.letterBtn, !canSelectLetter ? styles.letterBtnDisabled : null]}
+                onPress={() => onPickLetter(index)}
+                style={[styles.letterBtn, !canPickLetter ? styles.letterBtnDisabled : null]}
                 key={letter + index}
-                disabled={!canSelectLetter}
+                disabled={!canPickLetter}
               >
                 <Text style={styles.letterBtnText}>{letter}</Text>
               </Pressable>
@@ -53,10 +53,10 @@ export function SuggestedLetters({
 
             return (
               <Pressable
-                onPress={() => onSelectLetter(secondRowIndex)}
-                style={[styles.letterBtn, !canSelectLetter ? styles.letterBtnDisabled : null]}
+                onPress={() => onPickLetter(secondRowIndex)}
+                style={[styles.letterBtn, !canPickLetter ? styles.letterBtnDisabled : null]}
                 key={letter + index}
-                disabled={!canSelectLetter}
+                disabled={!canPickLetter}
               >
                 <Text style={styles.letterBtnText}>{letter}</Text>
               </Pressable>
