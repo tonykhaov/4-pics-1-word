@@ -11,6 +11,8 @@ type Guess = {
 export default function HomeScreen() {
   const [guess, setGuess] = React.useState<(Guess | null)[]>([...data[0].word].map(() => null))
 
+  const [status, setStatus] = React.useState<'success' | 'error' | 'idle'>('idle')
+
   const MAX_X = 12
   const letters = React.useRef<string[]>(
     shuffleArray([...data[0].word, ...new Array(MAX_X - data[0].word.length).fill(null).map(generateRandomLetter)]),
@@ -46,9 +48,9 @@ export default function HomeScreen() {
       // user is making a guess, show the feedback.
       const matchesWord = newGuess.join('') === data[0].word
       if (matchesWord) {
-        console.log('WORD FOUND:', data[0].word)
+        setStatus('success')
       } else {
-        console.log('WRONG GUESS:', newGuess.join(''))
+        setStatus('error')
       }
     }
   }
@@ -56,7 +58,9 @@ export default function HomeScreen() {
   const handleClear = () => {
     setGuess(guess.map(() => null))
     setUsedLetters(letters.current.map(() => false))
+    setStatus('idle')
   }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.images}>
@@ -66,27 +70,37 @@ export default function HomeScreen() {
       </View>
 
       <View style={styles.guess}>
-        {guess.map((letter, index) => (
-          <Pressable
-            key={index}
-            disabled={!letter}
-            style={styles.guessLetterBox}
-            onPress={() => {
-              if (!letter) {
-                return
-              }
-              const newGuess = [...guess]
-              newGuess[index] = null
-              setGuess(newGuess)
+        {guess.map((letter, index) => {
+          const unPickLetter = () => {
+            if (!letter) {
+              return
+            }
+            setStatus('idle')
 
-              const newUsedLetters = [...usedLetters]
-              newUsedLetters[letter.fromIndex] = false
-              setUsedLetters(newUsedLetters)
-            }}
-          >
-            <Text style={styles.guessLetterBoxText}>{letter?.text}</Text>
-          </Pressable>
-        ))}
+            const newGuess = [...guess]
+            newGuess[index] = null
+            setGuess(newGuess)
+
+            const newUsedLetters = [...usedLetters]
+            newUsedLetters[letter.fromIndex] = false
+            setUsedLetters(newUsedLetters)
+          }
+
+          return (
+            <Pressable
+              key={index}
+              disabled={!letter}
+              style={[
+                styles.guessLetterBox,
+                status === 'success' && styles.guessLetterBoxSuccess,
+                status === 'error' && styles.guessLetterBoxError,
+              ]}
+              onPress={unPickLetter}
+            >
+              <Text style={styles.guessLetterBoxText}>{letter?.text}</Text>
+            </Pressable>
+          )
+        })}
       </View>
 
       <View
@@ -250,6 +264,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 24,
     textTransform: 'uppercase',
+  },
+
+  guessLetterBoxError: {
+    backgroundColor: '#E52020',
+    borderBlockColor: '#B82132',
+    boxShadow: '0 0 0 1px #B82132',
+  },
+
+  guessLetterBoxSuccess: {
+    backgroundColor: '#255F38',
+    borderBlockColor: '#6A9C89',
+    boxShadow: '0 0 0 1px #6A9C89',
   },
 
   letterBtn: {
