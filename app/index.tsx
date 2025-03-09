@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import data from '../data.json'
 import { generateRandomLetter, shuffleArray } from '@/utils'
 import { SuggestedLetters } from '@/components/SuggestedLetters'
+import { ImagesGallery } from '@/components/ImagesGallery'
 
 type Guess = {
   text: string
@@ -61,11 +62,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.images}>
-        {data[0].images.map((url) => (
-          <Image key={url} src={url} style={styles.image} />
-        ))}
-      </View>
+      <ImagesGallery images={data[0].images} />
 
       <View style={styles.guess}>
         {guess.map((letter, index) => {
@@ -123,18 +120,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#31363F',
     padding: 16,
-  },
-  images: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  image: {
-    width: '48%', // each image should be 50% width ideally but there is a gap and other spacings
-    height: 170,
-    borderWidth: 4,
-    borderRadius: 4,
-    borderColor: '#BFBBA9',
   },
 
   guess: {
