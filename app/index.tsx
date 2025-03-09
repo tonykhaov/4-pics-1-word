@@ -119,7 +119,7 @@ export default function HomeScreen() {
           <View
             style={{
               flexDirection: 'row',
-              gap: 12,
+              gap: 4,
             }}
           >
             {letters.current.slice(0, 6).map((letter, index) => {
@@ -137,8 +137,8 @@ export default function HomeScreen() {
                   >
                     <View
                       style={{
-                        height: 44,
-                        backgroundColor: '#ADB2D4',
+                        height: 46,
+                        backgroundColor: '#4C585B',
                         borderRadius: 4,
                       }}
                     />
@@ -168,7 +168,7 @@ export default function HomeScreen() {
           <View
             style={{
               flexDirection: 'row',
-              gap: 12,
+              gap: 4,
             }}
           >
             {letters.current.slice(6).map((letter, index) => {
@@ -187,8 +187,8 @@ export default function HomeScreen() {
                   >
                     <View
                       style={{
-                        height: 44,
-                        backgroundColor: '#ADB2D4',
+                        height: 46,
+                        backgroundColor: '#4C585B',
                         borderRadius: 4,
                       }}
                     />
@@ -238,7 +238,9 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 8,
+    flex: 1,
+    backgroundColor: '#31363F',
+    padding: 16,
   },
   images: {
     flexDirection: 'row',
@@ -247,7 +249,10 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '48%', // each image should be 50% width ideally but there is a gap and other spacings
-    height: 150,
+    height: 170,
+    borderWidth: 4,
+    borderRadius: 4,
+    borderColor: '#BFBBA9',
   },
 
   guess: {
@@ -257,13 +262,13 @@ const styles = StyleSheet.create({
   },
 
   guessLetterBox: {
-    backgroundColor: '#31363F',
+    backgroundColor: '#131010',
     minWidth: 48,
     minHeight: 48,
     maxHeight: 48,
     maxWidth: 48,
-    borderBlockColor: '#76ABAE',
-    boxShadow: '0 0 0 1px #76ABAE',
+    borderBlockColor: '#9AA6B2',
+    boxShadow: '0 0 0 1px #9AA6B2',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -294,6 +299,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#EEEEEE',
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 4,
   },
 
   letterBtnText: {
@@ -302,6 +308,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   letterBtnDisabled: {
-    opacity: 0.1,
+    opacity: 0.2,
   },
 })
