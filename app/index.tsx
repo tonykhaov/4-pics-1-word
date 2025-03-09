@@ -66,19 +66,40 @@ export default function HomeScreen() {
             {letters.current.slice(0, 6).map((letter, index) => {
               const isUsed = usedLetters[index]
 
+              if (isUsed) {
+                return (
+                  <View
+                    style={{
+                      width: 48,
+                      height: 48,
+                      justifyContent: 'flex-end',
+                    }}
+                    key={letter + index}
+                  >
+                    <View
+                      style={{
+                        height: 44,
+                        backgroundColor: '#ADB2D4',
+                        borderRadius: 4,
+                      }}
+                    />
+                  </View>
+                )
+              }
+
               return (
-                <Pressable
-                  onPress={() => selectLetter(index)}
-                  disabled={isUsed}
-                  style={[styles.letterBtn, isUsed ? styles.letterBtnDisabled : null]}
-                  key={letter + index}
-                >
+                <Pressable onPress={() => selectLetter(index)} style={styles.letterBtn} key={letter + index}>
                   <Text style={styles.letterBtnText}>{letter}</Text>
                 </Pressable>
               )
             })}
           </View>
 
+          <View
+            style={{
+              marginTop: 8,
+            }}
+          />
           {/* Second row */}
           <View
             style={{
@@ -90,11 +111,31 @@ export default function HomeScreen() {
               const correctIndex = index + 6
               const isUsed = usedLetters[correctIndex]
 
+              if (isUsed) {
+                return (
+                  <View
+                    style={{
+                      width: 48,
+                      height: 48,
+                      justifyContent: 'flex-end',
+                    }}
+                    key={letter + correctIndex}
+                  >
+                    <View
+                      style={{
+                        height: 44,
+                        backgroundColor: '#ADB2D4',
+                        borderRadius: 4,
+                      }}
+                    />
+                  </View>
+                )
+              }
+
               return (
                 <Pressable
                   onPress={() => selectLetter(correctIndex)}
-                  disabled={isUsed}
-                  style={[styles.letterBtn, isUsed ? styles.letterBtnDisabled : null]}
+                  style={styles.letterBtn}
                   key={letter + correctIndex}
                 >
                   <Text style={styles.letterBtnText}>{letter}</Text>
