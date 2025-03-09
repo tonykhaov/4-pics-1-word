@@ -16,6 +16,8 @@ export default function HomeScreen() {
 
   const [usedLetters, setUsedLetters] = React.useState(letters.current.map(() => false))
 
+  const canAddMoreLetter = guess.some((letter) => letter === null)
+
   const selectLetter = (index: number) => {
     const newUsedLetters = [...usedLetters]
     newUsedLetters[index] = true
@@ -108,7 +110,12 @@ export default function HomeScreen() {
               }
 
               return (
-                <Pressable onPress={() => selectLetter(index)} style={styles.letterBtn} key={letter + index}>
+                <Pressable
+                  onPress={() => selectLetter(index)}
+                  style={[styles.letterBtn, !canAddMoreLetter ? styles.letterBtnDisabled : null]}
+                  key={letter + index}
+                  disabled={!canAddMoreLetter}
+                >
                   <Text style={styles.letterBtnText}>{letter}</Text>
                 </Pressable>
               )
@@ -155,8 +162,9 @@ export default function HomeScreen() {
               return (
                 <Pressable
                   onPress={() => selectLetter(correctIndex)}
-                  style={styles.letterBtn}
-                  key={letter + correctIndex}
+                  style={[styles.letterBtn, !canAddMoreLetter ? styles.letterBtnDisabled : null]}
+                  key={letter + index}
+                  disabled={!canAddMoreLetter}
                 >
                   <Text style={styles.letterBtnText}>{letter}</Text>
                 </Pressable>
