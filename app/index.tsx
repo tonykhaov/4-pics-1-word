@@ -63,6 +63,7 @@ export default function HomeScreen() {
         {guess.map((letter, index) => (
           <Pressable
             key={index}
+            disabled={!letter}
             style={styles.guessLetterBox}
             onPress={() => {
               const newGuess = [...guess]
