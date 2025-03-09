@@ -9,14 +9,18 @@ type Guess = {
   text: string
   fromIndex: number
 }
+
 export default function HomeScreen() {
   const [guess, setGuess] = React.useState<(Guess | null)[]>([...data[0].word].map(() => null))
 
   const [status, setStatus] = React.useState<'success' | 'error' | 'idle'>('idle')
 
-  const MAX_X = 12
-  const letters = React.useRef<string[]>(
-    shuffleArray([...data[0].word, ...new Array(MAX_X - data[0].word.length).fill(null).map(generateRandomLetter)]),
+  const MAX_SUGGESTED_LETTERS = 12
+  const letters = React.useRef(
+    shuffleArray([
+      ...data[0].word,
+      ...new Array(MAX_SUGGESTED_LETTERS - data[0].word.length).fill(null).map(generateRandomLetter),
+    ]),
   )
 
   const [usedLetters, setUsedLetters] = React.useState(letters.current.map(() => false))
