@@ -3,6 +3,7 @@ import { Image, Text, View, StyleSheet, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import data from '../data.json'
 import { generateRandomLetter, shuffleArray } from '@/utils'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 type Guess = {
   text: string
@@ -209,20 +210,27 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        <View
+        <Pressable
           style={{
+            padding: 8,
             justifyContent: 'center',
+            alignItems: 'center',
+            gap: 8,
+            borderRadius: 4,
+            backgroundColor: '#77B254',
           }}
+          onPress={handleClear}
         >
-          <Pressable
+          <MaterialCommunityIcons name="eraser" size={24} color="white" />
+          <Text
             style={{
-              padding: 16,
+              color: 'white',
+              fontWeight: 'bold',
             }}
-            onPress={handleClear}
           >
-            <Text>Clear</Text>
-          </Pressable>
-        </View>
+            Clear
+          </Text>
+        </Pressable>
       </View>
     </SafeAreaView>
   )
