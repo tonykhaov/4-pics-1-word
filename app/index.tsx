@@ -3,7 +3,7 @@ import { Image, Text, View, StyleSheet, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import data from '../data.json'
 import { generateRandomLetter, shuffleArray } from '@/utils'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { SuggestedLetters } from '@/components/SuggestedLetters'
 
 type Guess = {
   text: string
@@ -22,10 +22,7 @@ export default function HomeScreen() {
       ...new Array(MAX_SUGGESTED_LETTERS - data[0].word.length).fill(null).map(generateRandomLetter),
     ]),
   )
-
   const [usedLetters, setUsedLetters] = React.useState(letters.current.map(() => false))
-
-  const canAddMoreLetter = guess.some((letter) => letter === null)
 
   const selectLetter = (index: number) => {
     const newUsedLetters = [...usedLetters]
@@ -110,132 +107,17 @@ export default function HomeScreen() {
 
       <View
         style={{
-          marginTop: 48,
-          flexDirection: 'row',
+          marginTop: 32,
         }}
-      >
-        <View
-          style={{
-            flex: 1,
-          }}
-        >
-          {/* First row */}
-          <View
-            style={{
-              flexDirection: 'row',
-              gap: 4,
-            }}
-          >
-            {letters.current.slice(0, 6).map((letter, index) => {
-              const isUsed = usedLetters[index]
+      />
 
-              if (isUsed) {
-                return (
-                  <View
-                    style={{
-                      width: 48,
-                      height: 48,
-                      justifyContent: 'flex-end',
-                    }}
-                    key={letter + index}
-                  >
-                    <View
-                      style={{
-                        height: 46,
-                        backgroundColor: '#4C585B',
-                        borderRadius: 4,
-                      }}
-                    />
-                  </View>
-                )
-              }
-
-              return (
-                <Pressable
-                  onPress={() => selectLetter(index)}
-                  style={[styles.letterBtn, !canAddMoreLetter ? styles.letterBtnDisabled : null]}
-                  key={letter + index}
-                  disabled={!canAddMoreLetter}
-                >
-                  <Text style={styles.letterBtnText}>{letter}</Text>
-                </Pressable>
-              )
-            })}
-          </View>
-
-          <View
-            style={{
-              marginTop: 8,
-            }}
-          />
-          {/* Second row */}
-          <View
-            style={{
-              flexDirection: 'row',
-              gap: 4,
-            }}
-          >
-            {letters.current.slice(6).map((letter, index) => {
-              const correctIndex = index + 6
-              const isUsed = usedLetters[correctIndex]
-
-              if (isUsed) {
-                return (
-                  <View
-                    style={{
-                      width: 48,
-                      height: 48,
-                      justifyContent: 'flex-end',
-                    }}
-                    key={letter + correctIndex}
-                  >
-                    <View
-                      style={{
-                        height: 46,
-                        backgroundColor: '#4C585B',
-                        borderRadius: 4,
-                      }}
-                    />
-                  </View>
-                )
-              }
-
-              return (
-                <Pressable
-                  onPress={() => selectLetter(correctIndex)}
-                  style={[styles.letterBtn, !canAddMoreLetter ? styles.letterBtnDisabled : null]}
-                  key={letter + index}
-                  disabled={!canAddMoreLetter}
-                >
-                  <Text style={styles.letterBtnText}>{letter}</Text>
-                </Pressable>
-              )
-            })}
-          </View>
-        </View>
-
-        <Pressable
-          style={{
-            padding: 8,
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: 8,
-            borderRadius: 4,
-            backgroundColor: '#77B254',
-          }}
-          onPress={handleClear}
-        >
-          <MaterialCommunityIcons name="eraser" size={24} color="white" />
-          <Text
-            style={{
-              color: 'white',
-              fontWeight: 'bold',
-            }}
-          >
-            Clear
-          </Text>
-        </Pressable>
-      </View>
+      <SuggestedLetters
+        letters={letters.current}
+        usedLetters={usedLetters}
+        canSelectLetter={guess.some((letter) => letter === null)}
+        onSelectLetter={selectLetter}
+        onClear={handleClear}
+      />
     </SafeAreaView>
   )
 }
@@ -295,23 +177,5 @@ const styles = StyleSheet.create({
     boxShadow: '0 0 0 1px #6A9C89',
   },
 
-  letterBtn: {
-    minWidth: 48,
-    minHeight: 48,
-    maxWidth: 48,
-    maxHeight: 48,
-    backgroundColor: '#EEEEEE',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 4,
-  },
-
-  letterBtnText: {
-    fontSize: 24,
-    textTransform: 'uppercase',
-    fontWeight: 'bold',
-  },
-  letterBtnDisabled: {
-    opacity: 0.2,
-  },
+  separators: {},
 })
